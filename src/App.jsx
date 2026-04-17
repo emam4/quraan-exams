@@ -52,6 +52,11 @@ export default function App() {
           />
         )}
       </main>
+
+      <footer className="app-footer">
+        لأي خطأ أو اقتراح، تواصل معنا:{' '}
+        <a href="mailto:nouralden.emam@gmail.com">nouralden.emam@gmail.com</a>
+      </footer>
     </div>
   );
 }

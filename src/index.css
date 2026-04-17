@@ -260,6 +260,26 @@ body {
   line-height: 2;
 }
 
+/* Footer */
+.app-footer {
+  text-align: center;
+  margin-top: 32px;
+  padding: 16px;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.app-footer a {
+  color: #2e86c1;
+  text-decoration: none;
+  direction: ltr;
+  display: inline-block;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
   .juz-grid {
