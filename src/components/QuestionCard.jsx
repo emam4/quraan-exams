@@ -5,7 +5,7 @@ export default function QuestionCard({ question }) {
 
   if (!question) return null;
 
-  const { surah, verseStart, verseEnd, answerVerses, juz } = question;
+  const { verseStart, verseEnd, answerVerses } = question;
 
   return (
     <div className="question-card">
