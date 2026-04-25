@@ -5,7 +5,7 @@ export default function QuestionCard({ question }) {
 
   if (!question) return null;
 
-  const { verseStart, verseEnd, answerVerses } = question;
+  const { juz, surah, verseStart, verseEnd, answerVerses } = question;
 
   return (
     <div className="question-card">
@@ -30,6 +30,11 @@ export default function QuestionCard({ question }) {
 
       {showAnswer && (
         <div className="answer-block">
+          <div className="answer-meta">
+            <span>سورة {surah.name}</span>
+            <span>{' '}</span>
+            <span>الجزء {juz}</span>
+          </div>
           <div className="answer-label">الإجابة:</div>
           <div className="answer-verses">
             {answerVerses.map((v) => (
