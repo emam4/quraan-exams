@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 export default function QuestionCard({ question }) {
   const [showAnswer, setShowAnswer] = useState(false);
+  const [showMeta, setShowMeta] = useState(false);
 
   if (!question) return null;
 
@@ -9,9 +10,21 @@ export default function QuestionCard({ question }) {
 
   return (
     <div className="question-card">
-      <div className="question-meta">
-        {/* <span>الجزء {juz}</span>
-        <span>سورة {surah.name}</span> */}
+      <div className="question-meta-row">
+        <label className="meta-toggle">
+          <input
+            type="checkbox"
+            checked={showMeta}
+            onChange={(e) => setShowMeta(e.target.checked)}
+          />
+          إظهار السورة والجزء
+        </label>
+        {showMeta && (
+          <div className="question-meta">
+            <span>سورة {surah.name}</span>
+            <span>الجزء {juz}</span>
+          </div>
+        )}
       </div>
 
       <p className="question-text">
@@ -30,11 +43,6 @@ export default function QuestionCard({ question }) {
 
       {showAnswer && (
         <div className="answer-block">
-          <div className="answer-meta">
-            <span>سورة {surah.name}</span>
-            <span>{' '}</span>
-            <span>الجزء {juz}</span>
-          </div>
           <div className="answer-label">الإجابة:</div>
           <div className="answer-verses">
             {answerVerses.map((v) => (

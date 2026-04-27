@@ -158,10 +158,30 @@ body {
   border-right: 5px solid #1a5276;
 }
 
+.question-meta-row {
+  margin-bottom: 16px;
+}
+
+.meta-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  cursor: pointer;
+  user-select: none;
+}
+
+.meta-toggle input[type="checkbox"] {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+}
+
 .question-meta {
   display: flex;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-top: 10px;
   font-size: 0.9rem;
   color: #7f8c8d;
 }

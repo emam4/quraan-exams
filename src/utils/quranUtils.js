@@ -3,6 +3,11 @@ import JUZ_BOUNDARIES from '../data/juzBoundaries';
 
 const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+const wordCount = (text) => text.trim().split(/\s+/).length;
+
+const MIN_WORDS = 75;
+const MAX_WORDS = 170;
+
 // Returns verses from a surah that fall within a juz boundary
 function getVersesInJuz(surah, boundary) {
   const { startSurah, startVerse, endSurah, endVerse } = boundary;
@@ -32,19 +37,25 @@ export function getSurahsInJuz(juzNumber) {
   return result;
 }
 
-// Picks two non-consecutive verses (gap >= 2) from a verse list
-function pickTwoNonConsecutiveVerses(verses) {
-  // Need at least 3 verses so that two can have a gap of >= 2
+// Picks v1 and v2 such that the full verse range [v1..v2] is within the word-count window.
+// Verses are never split — only complete ayahs are counted.
+function pickVerseWindow(verses) {
   if (verses.length < 3) return null;
 
-  const maxAttempts = 100;
-  for (let i = 0; i < maxAttempts; i++) {
-    const idx1 = Math.floor(Math.random() * (verses.length - 2));
-    const idx2 = idx1 + 2 + Math.floor(Math.random() * (verses.length - idx1 - 2));
-    if (idx2 >= verses.length) continue;
-    const v1 = verses[idx1];
-    const v2 = verses[idx2];
-    if (v2.id - v1.id >= 2) return [v1, v2];
+  const indices = [...Array(verses.length - 2).keys()]
+    .sort(() => Math.random() - 0.5);
+
+  for (const i of indices) {
+    let cumulative = wordCount(verses[i].text);
+    const candidates = [];
+
+    for (let j = i + 1; j < verses.length; j++) {
+      cumulative += wordCount(verses[j].text);
+      if (cumulative > MAX_WORDS) break;
+      if (cumulative >= MIN_WORDS && j >= i + 2) candidates.push(verses[j]);
+    }
+
+    if (candidates.length > 0) return [verses[i], pickRandom(candidates)];
   }
   return null;
 }
@@ -56,14 +67,12 @@ export function generateQuestion(selectedJuzNumbers) {
   const juzNumber = pickRandom(selectedJuzNumbers);
   const surahsInJuz = getSurahsInJuz(juzNumber);
 
-  // Filter to surahs that have enough verses for a valid pair
   const eligible = surahsInJuz.filter((s) => s.verses.length >= 3);
   if (!eligible.length) return null;
 
-  // Try random surahs until we find a valid pair
   const shuffled = [...eligible].sort(() => Math.random() - 0.5);
   for (const { surah, verses } of shuffled) {
-    const pair = pickTwoNonConsecutiveVerses(verses);
+    const pair = pickVerseWindow(verses);
     if (pair) {
       const [v1, v2] = pair;
       const answerVerses = verses.filter((v) => v.id >= v1.id && v.id <= v2.id);
